@@ -1,0 +1,23 @@
+Discovery date,Company,Job title,Job ID,Job URL,Posting date,Location,Work mode,Salary / rate,Match score,Resume version,Application status,Application date,Recruiter,Contact source,Outreach status,Follow-up date,Interview status,Next action,Evidence / notes
+2026-01-01,Sample Analytics Co.,Databricks Data Engineer,S-101,,2026-01-01,"Remote, US",Remote,$90-100k,91,,SUBMITTED,,,,,2026-11-21,,Follow up with recruiter,JC-20260101-01
+2026-01-01,Sample Regional Bank,Databricks Data Engineer,S-102,,2026-01-01,"San Diego, CA",Onsite,$85-115k,90,,AWAITING APPROVAL,,,,,,,Review tailored resume,JC-20260101-02
+2026-01-01,Sample Manufacturer,Senior Data Engineer (Azure),S-103,,2026-01-01,"Minneapolis, MN",Onsite,$120-140k,88,,AWAITING APPROVAL,,,,,,,Approve application,JC-20260101-03
+2026-01-01,Sample Retail Group,Azure Data Engineer,S-104,,2026-01-01,"Cincinnati, OH",Onsite,$40-50/hr,86,,AWAITING APPROVAL,,,,,,,Confirm relocation,JC-20260101-04
+2026-01-01,Sample Security Startup,Databricks Engineer,S-105,,2026-01-01,"Remote, US",Remote,$150-175k,85,,AWAITING APPROVAL,,,,,,,Clarify requirements,JC-20260101-05
+2026-01-01,Sample Health Tech,Data Engineer II,S-106,,2026-01-01,"Remote, US",Remote,$125-150k,80,,QUALIFIED,,,,,,,Check eligibility,
+2026-01-01,Sample Consulting Firm,Data Engineer,S-107,,2026-01-01,"Detroit, MI",Onsite,$55-65/hr,76,,QUALIFIED,,,,,,,Optional,
+2026-01-01,Sample Global IT,Senior Data Engineer,S-108,,2026-01-01,"New York, NY",Unknown,$85-155k,,,DISCOVERED,,,,,,,Fetch full description,
+2026-01-01,Sample Insurance SaaS,Senior Data Engineer,S-109,,2026-01-01,"Remote, US",Remote,$115-145k,68,,SKIPPED,,,,,,,,Requires 7+ years
+2026-01-01,Sample Wealth Firm,Senior Data Engineer (Migration),S-110,,2026-01-01,"Philadelphia, PA",Hybrid,Not listed,65,,SKIPPED,,,,,,,,Requires 8+ years
+2026-01-01,Sample ERP Partner,Snowflake Data Engineer,S-111,,2026-01-01,"Remote, US",Remote,Not listed,60,,SKIPPED,,,,,,,,Core tool outside verified experience
+2026-01-01,Sample Agency,Data & ML Engineer,S-120,,2026-01-01,,,,,,SKIPPED,,,,,,,,Contract type not eligible
+2026-01-01,Sample Bank HQ,Data Engineer IV,S-121,,2026-01-01,,,,,,SKIPPED,,,,,,,,Seniority above target
+2026-01-01,Sample Gov Contractor,Data Warehouse Developer,S-122,,2026-01-01,,,,,,SKIPPED,,,,,,,,Clearance required
+2026-01-01,Sample Defense Co.,Senior Data Engineer,S-123,,2026-01-01,,,,,,SKIPPED,,,,,,,,Clearance required
+2026-01-01,Sample Federal IT,Platform Engineer,S-124,,2026-01-01,,,,,,SKIPPED,,,,,,,,Clearance required
+2026-01-01,Sample Cloud Partner,Senior Data Engineer,S-125,,2026-01-01,,,,,,SKIPPED,,,,,,,,10+ years required
+2026-01-01,Sample Staffing,GCP Data Engineer,S-126,,2026-01-01,,,,,,SKIPPED,,,,,,,,12+ years required
+2026-01-01,Sample Systems,Snowflake Architect,S-127,,2026-01-01,,,,,,SKIPPED,,,,,,,,Architect level
+2026-01-01,Sample State Agency,Snowflake Data Engineer,S-128,,2026-01-01,,,,,,SKIPPED,,,,,,,,15+ years required
+2026-01-01,Sample Staffing II,Principal Data Engineer,S-129,,2026-01-01,,,,,,SKIPPED,,,,,,,,Principal level
+2026-01-01,Sample Media Co.,Data Engineer,S-130,,2026-01-01,,,,,,SKIPPED,,,,,,,,Duplicate listing

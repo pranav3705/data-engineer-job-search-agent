@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pranav Konreddy · Data Engineer</title>
+<meta name="description" content="Pranav Konreddy, Data Engineer: Azure Databricks, PySpark, Delta Lake, AWS. Profile and a demo of my automated job search tracker.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap">
+<style>
+/* Layout: one centered column; summary tiles, two charts side by side, follow-ups, full table */
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --fg: #1b2230; --muted: #5d6676; --line: #dfe3ea;
+  --accent: #2f5fb3; --ok: #1f8a5b; --warn: #b7791f; --bad: #c0392b; --quiet: #b9c0cc;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #11151c; --panel: #181e27; --fg: #e8ecf2; --muted: #9aa3b2; --line: #2a3240;
+    --accent: #7aa2f0; --ok: #4cc38a; --warn: #e0a84a; --bad: #ef6b5e; --quiet: #4a5466; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 var(--sans); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-block: 40px 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 28px; }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 4vw, 40px); margin: 4px 0 6px; text-wrap: balance; }
+h2 { font-size: 16px; font-weight: 600; margin: 0; }
+.sub { color: var(--muted); margin: 0; max-width: 70ch; }
+.badge { display: inline-block; margin-top: 10px; font-size: 12px; padding: 3px 10px; border-radius: 999px; border: 1px dashed var(--muted); color: var(--muted); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+.tile { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; display: flex; flex-direction: column; gap: 4px; }
+.tile .n { font-family: var(--serif); font-size: 38px; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.tile .c { font-size: 13px; color: var(--muted); }
+.tile.warn { border-color: var(--warn); } .tile.ok { border-color: var(--ok); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.chart { position: relative; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart text { font-family: var(--sans); font-size: 12px; }
+.tip { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 6px 18px rgba(0,0,0,.12); border-radius: 8px; padding: 4px 8px; font-size: 12px; white-space: nowrap; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; }
+select { font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 760px; }
+th { text-align: left; font-size: 12px; font-weight: 500; color: var(--muted); padding: 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.co { font-weight: 500; } .meta { font-size: 12px; color: var(--muted); }
+.pill { display: inline-block; font-size: 12px; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; }
+.pill.submitted { color: var(--ok); border-color: var(--ok); }
+.pill.awaiting { color: var(--warn); border-color: var(--warn); }
+.pill.skipped { color: var(--muted); }
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.list li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.when { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+footer { color: var(--muted); font-size: 12px; }
+.hero { display:flex; flex-wrap:wrap; gap:20px; align-items:flex-end; justify-content:space-between; }
+.hero h1 { font-size: clamp(32px, 5vw, 48px); margin: 4px 0 4px; }
+.role { font-size: 17px; color: var(--muted); margin: 0; }
+.btn { display:inline-flex; align-items:center; gap:8px; padding:9px 16px; border-radius:999px; background: var(--accent); color: var(--panel); text-decoration:none; font-weight:500; }
+.btn:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.about { max-width: 72ch; margin: 0; font-size: 16px; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; }
+.chip { font-size:13px; padding:4px 10px; border-radius:999px; background: var(--bg); border:1px solid var(--line); }
+.chip.personal { border-style: dashed; color: var(--muted); }
+.skillgroups { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.skillgroups h3, .xp h3 { font-size: 13px; font-weight: 600; margin: 0 0 8px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.xp { display:flex; flex-direction:column; gap: 18px; }
+.job { display:grid; grid-template-columns: 150px 1fr; gap: 6px 18px; }
+.job .dates { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; padding-top: 2px; }
+.job .t { font-weight: 600; } .job .o { color: var(--muted); }
+.job ul { margin: 6px 0 0; padding-left: 18px; color: var(--fg); }
+.job li { margin: 2px 0; }
+@media (max-width: 560px) { .job { grid-template-columns: 1fr; } }
+.divider { display:flex; flex-direction:column; gap:6px; padding-top: 12px; border-top: 1px solid var(--line); }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Data Engineer · Michigan, USA · Open to remote, hybrid or relocation</div>
+      <h1>Pranav Konreddy</h1>
+      <p class="role">Azure Databricks · PySpark · Delta Lake · AWS Glue &amp; EMR · ETL/ELT</p>
+    </div>
+    <a class="btn" href="https://www.linkedin.com/in/kpranavsai" target="_blank" rel="noopener">Connect on LinkedIn</a>
+  </header>
+
+  <section class="card" aria-label="About">
+    <h2>About</h2>
+    <p class="about">Data engineer with 4+ years of experience building production ETL/ELT pipelines on Azure Databricks and AWS for healthcare, banking and insurance data. I design Bronze/Silver/Gold lakehouse layers on Delta Lake, build incremental ingestion with Auto Loader and CDC, and keep pipelines reliable with reconciliation checks and production support. MS in Computer Science, Lawrence Technological University (Dec 2025).</p>
+    <div class="chips" aria-label="Highlights">
+      <span class="chip">50 GB/day from 12+ source systems</span>
+      <span class="chip">~40% faster batch loads with Auto Loader + CDC</span>
+      <span class="chip">8M+ banking transactions/day on EMR</span>
+      <span class="chip">100+ data validation rules</span>
+    </div>
+  </section>
+
+  <section class="card" aria-label="Skills">
+    <h2>Skills</h2>
+    <div class="skillgroups">
+      <div><h3>Core engineering</h3><div class="chips"><span class="chip">Python</span><span class="chip">SQL</span><span class="chip">PySpark</span><span class="chip">Spark SQL</span><span class="chip">ETL/ELT</span><span class="chip">CDC</span></div></div>
+      <div><h3>Azure</h3><div class="chips"><span class="chip">Azure Databricks</span><span class="chip">Delta Lake</span><span class="chip">Auto Loader</span><span class="chip">Data Factory</span><span class="chip">ADLS Gen2</span><span class="chip">Unity Catalog</span><span class="chip">Azure DevOps</span></div></div>
+      <div><h3>AWS</h3><div class="chips"><span class="chip">Glue</span><span class="chip">S3</span><span class="chip">EMR</span><span class="chip">Athena</span><span class="chip">Apache Iceberg</span><span class="chip">Airflow</span></div></div>
+      <div><h3>Modeling &amp; quality</h3><div class="chips"><span class="chip">Medallion architecture</span><span class="chip">Dimensional modeling</span><span class="chip">SCD 1 &amp; 2</span><span class="chip">Reconciliation</span><span class="chip">Lineage</span></div></div>
+      <div><h3>Personal projects</h3><div class="chips"><span class="chip personal">Snowflake</span><span class="chip personal">dbt</span><span class="chip personal">Kafka</span><span class="chip personal">GCP Dataflow</span><span class="chip personal">BigQuery</span></div></div>
+    </div>
+  </section>
+
+  <section class="card xp" aria-label="Experience">
+    <h2>Experience</h2>
+    <div class="job"><div class="dates">Nov 2024 – Present</div><div><div class="t">Azure Databricks Data Engineer</div><div class="o">DXC Technology (client) · Healthcare lakehouse platform</div>
+      <ul><li>PySpark and Spark SQL pipelines on Azure Databricks and ADF processing 50+ GB of claims data daily.</li><li>Bronze/Silver/Gold Delta Lake layers, Auto Loader + CDC ingestion, Unity Catalog governance.</li></ul></div></div>
+    <div class="job"><div class="dates">Jun 2022 – Nov 2023</div><div><div class="t">AWS Data Engineer</div><div class="o">ICICI Bank (client) · Transaction analytics &amp; data lake</div>
+      <ul><li>AWS Glue and EMR Spark jobs for 8M+ transactions/day; ~30% faster runtimes through tuning.</li><li>Airflow orchestration, Athena reconciliation and Apache Iceberg tables.</li></ul></div></div>
+    <div class="job"><div class="dates">May 2021 – May 2022</div><div><div class="t">Data Analyst</div><div class="o">AllState Solution · Insurance claims reporting</div>
+      <ul><li>Python and SQL data preparation, profiling and quality checks; fact/dimension tables and stored procedures.</li></ul></div></div>
+  </section>
+
+  <section class="divider" aria-label="Job search tracker">
+    <div class="eyebrow">Side project</div>
+    <h2 style="font-size:22px;font-family:var(--serif);font-weight:400">My automated job search tracker</h2>
+    <p class="sub">A daily pipeline searches job boards, scores each posting against my resume, tailors a resume for strong matches and tracks every application. The numbers below are fictional sample data that show how it works.</p>
+  </section>
+  <div>
+    <h1 style="font-size:28px;margin:0 0 6px">Job Search Tracker</h1>
+    <p class="sub" id="takeaway"></p>
+    <span class="badge">Fictional sample data for demonstration</span>
+  </div>
+
+  <section class="tiles" aria-label="Pipeline summary">
+    <div class="tile"><span class="n" id="k-screened"></span><span class="c">Jobs screened</span></div>
+    <div class="tile"><span class="n" id="k-qualified"></span><span class="c">Qualified (score 80+)</span></div>
+    <div class="tile"><span class="n" id="k-cases"></span><span class="c">Job cases prepared</span></div>
+    <div class="tile warn"><span class="n" id="k-awaiting"></span><span class="c">Awaiting approval</span></div>
+    <div class="tile ok"><span class="n" id="k-submitted"></span><span class="c">Submitted</span></div>
+    <div class="tile"><span class="n" id="k-interviews"></span><span class="c">Interviews</span></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card"><h2>Pipeline by status</h2><div class="chart" id="status-chart"></div></section>
+    <section class="card">
+      <h2>Match score of scored jobs</h2>
+      <div class="legend"><span><i style="background:var(--ok)"></i>Submitted</span><span><i style="background:var(--accent)"></i>85+ (resume tailored)</span><span><i style="background:var(--quiet)"></i>Below 85 or skipped</span></div>
+      <div class="chart" id="score-chart"></div>
+    </section>
+  </div>
+
+  <section class="card"><h2>Upcoming follow-ups</h2><ul class="list" id="followups"></ul></section>
+
+  <section class="card">
+    <div class="toolbar"><h2>All jobs</h2><select id="filter" aria-label="Filter by status"></select></div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Company / role</th><th>Status</th><th>Score</th><th>Pay</th><th>Mode</th><th>Location</th><th>Next action / reason</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>Profile details above are real. Every company, figure and date in the job search tracker is fictional sample data.</footer>
+</div>
+
+<script>
+const ROWS = [{"Company": "Sample Analytics Co.", "Job title": "Databricks Data Engineer", "Job ID": "S-101", "Location": "Remote, US", "Work mode": "Remote", "Salary / rate": "$90-100k", "Match score": "91", "Application status": "SUBMITTED", "Follow-up date": "2026-11-21", "Next action": "Follow up with recruiter", "Evidence / notes": "JC-20260101-01"}, {"Company": "Sample Regional Bank", "Job title": "Databricks Data Engineer", "Job ID": "S-102", "Location": "San Diego, CA", "Work mode": "Onsite", "Salary / rate": "$85-115k", "Match score": "90", "Application status": "AWAITING APPROVAL", "Follow-up date": "", "Next action": "Review tailored resume", "Evidence / notes": "JC-20260101-02"}, {"Company": "Sample Manufacturer", "Job title": "Senior Data Engineer (Azure)", "Job ID": "S-103", "Location": "Minneapolis, MN", "Work mode": "Onsite", "Salary / rate": "$120-140k", "Match score": "88", "Application status": "AWAITING APPROVAL", "Follow-up date": "", "Next action": "Approve application", "Evidence / notes": "JC-20260101-03"}, {"Company": "Sample Retail Group", "Job title": "Azure Data Engineer", "Job ID": "S-104", "Location": "Cincinnati, OH", "Work mode": "Onsite", "Salary / rate": "$40-50/hr", "Match score": "86", "Application status": "AWAITING APPROVAL", "Follow-up date": "", "Next action": "Confirm relocation", "Evidence / notes": "JC-20260101-04"}, {"Company": "Sample Security Startup", "Job title": "Databricks Engineer", "Job ID": "S-105", "Location": "Remote, US", "Work mode": "Remote", "Salary / rate": "$150-175k", "Match score": "85", "Application status": "AWAITING APPROVAL", "Follow-up date": "", "Next action": "Clarify requirements", "Evidence / notes": "JC-20260101-05"}, {"Company": "Sample Health Tech", "Job title": "Data Engineer II", "Job ID": "S-106", "Location": "Remote, US", "Work mode": "Remote", "Salary / rate": "$125-150k", "Match score": "80", "Application status": "QUALIFIED", "Follow-up date": "", "Next action": "Check eligibility", "Evidence / notes": ""}, {"Company": "Sample Consulting Firm", "Job title": "Data Engineer", "Job ID": "S-107", "Location": "Detroit, MI", "Work mode": "Onsite", "Salary / rate": "$55-65/hr", "Match score": "76", "Application status": "QUALIFIED", "Follow-up date": "", "Next action": "Optional", "Evidence / notes": ""}, {"Company": "Sample Global IT", "Job title": "Senior Data Engineer", "Job ID": "S-108", "Location": "New York, NY", "Work mode": "Unknown", "Salary / rate": "$85-155k", "Match score": "", "Application status": "DISCOVERED", "Follow-up date": "", "Next action": "Fetch full description", "Evidence / notes": ""}, {"Company": "Sample Insurance SaaS", "Job title": "Senior Data Engineer", "Job ID": "S-109", "Location": "Remote, US", "Work mode": "Remote", "Salary / rate": "$115-145k", "Match score": "68", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "Requires 7+ years"}, {"Company": "Sample Wealth Firm", "Job title": "Senior Data Engineer (Migration)", "Job ID": "S-110", "Location": "Philadelphia, PA", "Work mode": "Hybrid", "Salary / rate": "Not listed", "Match score": "65", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "Requires 8+ years"}, {"Company": "Sample ERP Partner", "Job title": "Snowflake Data Engineer", "Job ID": "S-111", "Location": "Remote, US", "Work mode": "Remote", "Salary / rate": "Not listed", "Match score": "60", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "Core tool outside verified experience"}, {"Company": "Sample Agency", "Job title": "Data & ML Engineer", "Job ID": "S-120", "Location": "", "Work mode": "", "Salary / rate": "", "Match score": "", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "Contract type not eligible"}, {"Company": "Sample Bank HQ", "Job title": "Data Engineer IV", "Job ID": "S-121", "Location": "", "Work mode": "", "Salary / rate": "", "Match score": "", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "Seniority above target"}, {"Company": "Sample Gov Contractor", "Job title": "Data Warehouse Developer", "Job ID": "S-122", "Location": "", "Work mode": "", "Salary / rate": "", "Match score": "", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "Clearance required"}, {"Company": "Sample Defense Co.", "Job title": "Senior Data Engineer", "Job ID": "S-123", "Location": "", "Work mode": "", "Salary / rate": "", "Match score": "", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "Clearance required"}, {"Company": "Sample Federal IT", "Job title": "Platform Engineer", "Job ID": "S-124", "Location": "", "Work mode": "", "Salary / rate": "", "Match score": "", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "Clearance required"}, {"Company": "Sample Cloud Partner", "Job title": "Senior Data Engineer", "Job ID": "S-125", "Location": "", "Work mode": "", "Salary / rate": "", "Match score": "", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "10+ years required"}, {"Company": "Sample Staffing", "Job title": "GCP Data Engineer", "Job ID": "S-126", "Location": "", "Work mode": "", "Salary / rate": "", "Match score": "", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "12+ years required"}, {"Company": "Sample Systems", "Job title": "Snowflake Architect", "Job ID": "S-127", "Location": "", "Work mode": "", "Salary / rate": "", "Match score": "", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "Architect level"}, {"Company": "Sample State Agency", "Job title": "Snowflake Data Engineer", "Job ID": "S-128", "Location": "", "Work mode": "", "Salary / rate": "", "Match score": "", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "15+ years required"}, {"Company": "Sample Staffing II", "Job title": "Principal Data Engineer", "Job ID": "S-129", "Location": "", "Work mode": "", "Salary / rate": "", "Match score": "", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "Principal level"}, {"Company": "Sample Media Co.", "Job title": "Data Engineer", "Job ID": "S-130", "Location": "", "Work mode": "", "Salary / rate": "", "Match score": "", "Application status": "SKIPPED", "Follow-up date": "", "Next action": "", "Evidence / notes": "Duplicate listing"}];
+const ORDER = ['DISCOVERED','QUALIFIED','AWAITING APPROVAL','SUBMITTED','INTERVIEW','OFFER','REJECTED','SKIPPED'];
+const st = r => (r['Application status'] || '').trim();
+const score = r => { const n = parseFloat(r['Match score']); return Number.isFinite(n) ? n : null; };
+const cap = s => s.toLowerCase().replace(/^\w/, c => c.toUpperCase());
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs = {}, text) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; };
+
+const k = {
+  screened: ROWS.length,
+  qualified: ROWS.filter(r => st(r) !== 'SKIPPED' && score(r) !== null && score(r) >= 80).length,
+  cases: ROWS.filter(r => /JC-\d{8}-\d{2}/.test(r['Evidence / notes'] || '')).length,
+  awaiting: ROWS.filter(r => st(r) === 'AWAITING APPROVAL').length,
+  submitted: ROWS.filter(r => st(r) === 'SUBMITTED').length,
+  interviews: ROWS.filter(r => st(r) === 'INTERVIEW').length,
+  skipped: ROWS.filter(r => st(r) === 'SKIPPED').length
+};
+for (const id of ['screened','qualified','cases','awaiting','submitted','interviews']) document.getElementById('k-' + id).textContent = k[id];
+document.getElementById('takeaway').textContent = `${k.screened} jobs screened in the last 24 hours: ${k.submitted} submitted, ${k.awaiting} waiting for approval, and ${k.skipped} skipped for failing a hard requirement such as clearance or seniority.`;
+
+function tipFor(box) { let t = box.querySelector('.tip'); if (!t) { t = document.createElement('div'); t.className = 'tip'; t.hidden = true; box.appendChild(t); } return t; }
+
+function barChart(box, data, { labelW, min = 0, max, colorOf, tipText, ticks }) {
+  box.replaceChildren();
+  const W = Math.max(300, box.clientWidth), rowH = 28, top = 4, H = data.length * rowH + (ticks ? 26 : 8);
+  const x0 = labelW, x1 = W - 36, sx = v => x0 + (v - min) / (max - min) * (x1 - x0);
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': box.getAttribute('aria-label') || '' });
+  if (ticks) ticks.forEach(t => {
+    svg.append(el('line', { x1: sx(t), x2: sx(t), y1: 0, y2: data.length * rowH, stroke: t === 85 ? css('--muted') : css('--line'), 'stroke-dasharray': t === 85 ? '4 3' : '' }));
+    svg.append(el('text', { x: sx(t), y: data.length * rowH + 16, 'text-anchor': 'middle', fill: css('--muted') }, t));
+  });
+  const tip = tipFor(box);
+  data.forEach((d, i) => {
+    const y = top + i * rowH, h = rowH - 10;
+    const label = d.label.length > 32 ? d.label.slice(0, 31) + '…' : d.label;
+    svg.append(el('text', { x: labelW - 8, y: y + h / 2 + 4, 'text-anchor': 'end', fill: css('--muted') }, label));
+    const rect = el('rect', { x: sx(min), y, width: Math.max(2, sx(d.value) - sx(min)), height: h, rx: 3, fill: colorOf(d) });
+    rect.addEventListener('pointermove', ev => { const b = box.getBoundingClientRect(); tip.hidden = false; tip.textContent = tipText(d); tip.style.left = Math.min(ev.clientX - b.left + 10, b.width - 220) + 'px'; tip.style.top = (ev.clientY - b.top - 34) + 'px'; });
+    rect.addEventListener('pointerleave', () => { tip.hidden = true; });
+    svg.append(rect);
+    svg.append(el('text', { x: sx(d.value) + 6, y: y + h / 2 + 4, fill: css('--fg'), style: 'font-variant-numeric:tabular-nums' }, d.value));
+  });
+  box.append(svg); box.append(tip);
+}
+
+function draw() {
+  const counts = new Map(); ROWS.forEach(r => counts.set(st(r), (counts.get(st(r)) || 0) + 1));
+  const byStatus = [...counts].map(([s, n]) => ({ label: cap(s), status: s, value: n })).sort((a, b) => ORDER.indexOf(a.status) - ORDER.indexOf(b.status));
+  const sBox = document.getElementById('status-chart'); sBox.setAttribute('aria-label', 'Number of jobs in each application status');
+  barChart(sBox, byStatus, { labelW: 140, max: Math.max(...byStatus.map(d => d.value)), tipText: d => `${d.label}: ${d.value} job${d.value === 1 ? '' : 's'}`,
+    colorOf: d => d.status === 'SUBMITTED' ? css('--ok') : d.status === 'AWAITING APPROVAL' ? css('--warn') : d.status === 'SKIPPED' ? css('--quiet') : css('--accent') });
+
+  const scored = ROWS.filter(r => score(r) !== null).map(r => ({ label: `${r['Company'].replace(/^Sample /, '')} · ${r['Job title']}`, value: score(r), status: st(r) })).sort((a, b) => b.value - a.value);
+  const cBox = document.getElementById('score-chart'); cBox.setAttribute('aria-label', 'Match score for each scored job on a 50 to 100 scale');
+  const narrow = cBox.clientWidth < 460;
+  barChart(cBox, scored, { labelW: narrow ? 150 : 230, min: 50, max: 100, ticks: [50, 70, 80, 85, 90, 100], tipText: d => `${d.label}: ${d.value} (${d.status.toLowerCase()})`,
+    colorOf: d => d.status === 'SUBMITTED' ? css('--ok') : d.status === 'SKIPPED' || d.value < 85 ? css('--quiet') : css('--accent') });
+}
+
+const fu = document.getElementById('followups');
+ROWS.filter(r => (r['Follow-up date'] || '').trim() && st(r) === 'SUBMITTED').forEach(r => {
+  const li = document.createElement('li'); const a = document.createElement('span'); a.textContent = `${r['Company']} · ${r['Job title']}`;
+  const b = document.createElement('span'); b.className = 'when';
+  b.textContent = new Date(r['Follow-up date'] + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' });
+  li.append(a, b); fu.append(li);
+});
+
+const sel = document.getElementById('filter');
+sel.append(new Option('All statuses', ''), ...[...new Set(ROWS.map(st))].sort().map(s => new Option(cap(s), s)));
+function table() {
+  const tb = document.getElementById('rows'); tb.replaceChildren();
+  const rank = s => ({ 'AWAITING APPROVAL': 0, 'SUBMITTED': 1, 'QUALIFIED': 2, 'DISCOVERED': 3, 'SKIPPED': 9 }[s] ?? 5);
+  ROWS.filter(r => !sel.value || st(r) === sel.value).sort((a, b) => rank(st(a)) - rank(st(b)) || (score(b) || 0) - (score(a) || 0)).forEach(r => {
+    const tr = document.createElement('tr'); const td = c => { const x = document.createElement('td'); if (c) x.className = c; tr.append(x); return x; };
+    const c1 = td(); const co = document.createElement('div'); co.className = 'co'; co.textContent = r['Company'];
+    const ti = document.createElement('div'); ti.className = 'meta'; ti.textContent = r['Job title']; c1.append(co, ti);
+    const p = document.createElement('span'); p.className = 'pill ' + st(r).toLowerCase().split(' ')[0]; p.textContent = st(r).toLowerCase(); td().append(p);
+    td('num').textContent = r['Match score'] || '–'; td().textContent = r['Salary / rate'] || '–'; td().textContent = r['Work mode'] || '–'; td().textContent = r['Location'] || '–';
+    td().textContent = r['Next action'] || r['Evidence / notes'] || '–';
+    tb.append(tr);
+  });
+}
+sel.addEventListener('change', table);
+table(); draw();
+let t; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(draw, 150); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+ "target_titles": [
+  "Data Engineer",
+  "Senior Data Engineer",
+  "Azure Data Engineer",
+  "AWS Data Engineer",
+  "Databricks Engineer",
+  "Databricks Data Engineer",
+  "Snowflake Data Engineer",
+  "dbt Engineer",
+  "Microsoft Fabric Engineer",
+  "GCP Data Engineer"
+ ],
+ "primary_track": "Azure/AWS Databricks + PySpark data engineering (professional). Snowflake/dbt and GCP are personal-project only and score lower when they are core requirements.",
+ "locations": [
+  "Michigan",
+  "United States (remote)",
+  "Any US city (relocation OK)"
+ ],
+ "employment": [
+  "FULLTIME",
+  "CONTRACTS (W2)"
+ ],
+ "hard_excludes": [
+  "security clearance required",
+  "US citizen only",
+  "required years > 7",
+  "pay below floor"
+ ],
+ "flags_for_review": [
+  "local candidates only (needs relocation commitment)",
+  "public trust with residency rule",
+  "authorized now AND in the future wording"
+ ],
+ "sources_connected": [
+  "Dice (MCP)",
+  "Indeed (MCP)",
+  "Firecrawl jobs_search: Indeed, Glassdoor, Workday/Greenhouse/Lever employer boards"
+ ],
+ "sources_not_connected": [
+  "LinkedIn Jobs (no API; login-walled)",
+  "ZipRecruiter",
+  "Built In",
+  "Wellfound",
+  "USAJobs (citizenship-gated)"
+ ]
+}

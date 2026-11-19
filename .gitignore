@@ -1,0 +1,13 @@
+# Private: never commit real resumes, trackers, job cases or personal profile data
+*.docx
+*.pdf
+Resume/
+agency/
+profile/
+job_cases/
+reports/
+tracker/
+application_tracker.csv
+candidate_profile.md
+.DS_Store
+__pycache__/
